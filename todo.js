@@ -4,31 +4,36 @@ const todoBtn = document.querySelector(".todo-app-btn");
 const todoList = document.querySelector(".todo-app-list");
 
 
-todoBtn.addEventListener("click", addTodoList);
-todoList.addEventListener("click", TodoAction);
+$(todoBtn).on("click", addTodoList);
+$(todoList).on("click", TodoAction);
+
+document.addEventListener("DOMContentLoaded", getTodosLocal);
 
 
 function addTodoList(event) {
 
 
     const todoNewDiv = document.createElement("div");
-    todoNewDiv.classList.add("todo-app-item-list");
+    $(todoNewDiv).addClass("todo-app-item-list");
 
+    //Adding comleted task icone
     const todoNewInput = document.createElement("span");
-    todoNewInput.innerHTML = '<i class="bi bi-app"></i>';
-    todoNewDiv.appendChild(todoNewInput);
+    $(todoNewInput).html('<i class="bi bi-app"></i>');
+    $(todoNewDiv).append(todoNewInput);
 
+    //Adding text(Task)
     const todoNewP = document.createElement("p");
-    todoNewP.innerHTML = todoInput.value;
-    todoNewDiv.appendChild(todoNewP);
+    $(todoNewP).text(todoInput.value);
+    $(todoNewDiv).append(todoNewP);
+    saveTodoLocal(todoInput.value);
 
+    //Adding delete icone
     const todoNewAction = document.createElement("span");
-    todoNewAction.innerHTML = '<i class="bi bi-trash3-fill close"></i>';
-    todoNewDiv.appendChild(todoNewAction);
+    $(todoNewAction).html('<i class="bi bi-trash3-fill close"></i>');
+    $(todoNewDiv).append(todoNewAction);
 
-
-
-    todoList.appendChild(todoNewDiv);
+    //Adding all elements to the div
+    $(todoList).append(todoNewDiv);
     todoInput.value = "";
 }
 
@@ -39,10 +44,10 @@ function TodoAction(e) {
     //Task completed
 
     if (todoItem.classList[1] === "bi-app") {
-        todoItem.classList.toggle('bi-check2-square');
+        $(todoItem).toggleClass('bi-check2-square');
         const todoComplete = todoItem.parentElement;
         const todoCompleted = todoComplete.parentElement;
-        todoCompleted.classList.toggle('completed');
+        $(todoCompleted).toggleClass('completed');
     }
 
     // Deleting Todo Task
@@ -52,5 +57,67 @@ function TodoAction(e) {
         const todoDeleteElementTask = todoDeleteElement.parentElement;
 
         todoDeleteElementTask.remove();
+        deleteTodosLocal(todoDeleteElementTask);
     }
+}
+
+
+function saveTodoLocal(todoItem) {
+    let todo;
+    if (localStorage.getItem('todo') === null) {
+        todo = [];
+    }
+    else {
+        todo = JSON.parse(localStorage.getItem('todo'));
+
+    }
+
+    todo.push(todoItem);
+    localStorage.setItem("todo", JSON.stringify(todo));
+}
+
+
+function getTodosLocal(todoItem) {
+    let todo;
+    if (localStorage.getItem('todo') === null) {
+        todo = [];
+    }
+    else {
+        todo = JSON.parse(localStorage.getItem('todo'));
+    }
+
+    todo.forEach(function (todo) {
+        const todoNewDiv = document.createElement("div");
+        todoNewDiv.classList.add("todo-app-item-list");
+
+        const todoNewInput = document.createElement("span");
+        todoNewInput.innerHTML = '<i class="bi bi-app"></i>';
+        todoNewDiv.appendChild(todoNewInput);
+
+        const todoNewP = document.createElement("p");
+        todoNewP.innerHTML = todo; // get values from local storage
+        todoNewDiv.appendChild(todoNewP);
+
+        const todoNewAction = document.createElement("span");
+        todoNewAction.innerHTML = '<i class="bi bi-trash3-fill close"></i>';
+        todoNewDiv.appendChild(todoNewAction);
+
+        todoList.appendChild(todoNewDiv);
+    });
+}
+
+//Delete Todo Item from Local Storage
+
+function deleteTodosLocal(todoDelete) {
+    let todo;
+    if (localStorage.getItem('todo') === null) {
+        todo = [];
+    }
+    else {
+        todo = JSON.parse(localStorage.getItem('todo'));
+    }
+    const todoDeleteIndex = todoDelete.children[1].innerHTML;
+    todo.splice(todo.indexOf(todoDeleteIndex), 1);
+
+    localStorage.setItem('todo', JSON.stringify(todo));
 }
