@@ -95,7 +95,7 @@ function getTodosLocal(todoItem) {
         todoNewDiv.appendChild(todoNewInput);
 
         const todoNewP = document.createElement("p");
-        todoNewP.innerHTML = todo; // get values from local storage
+        todoNewP.innerHTML = todo; 
         todoNewDiv.appendChild(todoNewP);
 
         const todoNewAction = document.createElement("span");
@@ -106,7 +106,6 @@ function getTodosLocal(todoItem) {
     });
 }
 
-//Delete Todo Item from Local Storage
 
 function deleteTodosLocal(todoDelete) {
     let todo;
