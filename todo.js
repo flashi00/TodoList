@@ -35,6 +35,12 @@ function addTodoList(event) {
     //Adding all elements to the div
     $(todoList).append(todoNewDiv);
     todoInput.value = "";
+
+    $("span").hover(function() {
+        $(this).css('cursor','pointer');
+    }, function() {
+        $(this).css('cursor','auto');
+    });
 }
 
 
@@ -69,7 +75,6 @@ function saveTodoLocal(todoItem) {
     }
     else {
         todo = JSON.parse(localStorage.getItem('todo'));
-
     }
 
     todo.push(todoItem);
@@ -88,24 +93,31 @@ function getTodosLocal(todoItem) {
 
     todo.forEach(function (todo) {
         const todoNewDiv = document.createElement("div");
-        todoNewDiv.classList.add("todo-app-item-list");
+        $(todoNewDiv).addClass("todo-app-item-list");
 
         const todoNewInput = document.createElement("span");
-        todoNewInput.innerHTML = '<i class="bi bi-app"></i>';
-        todoNewDiv.appendChild(todoNewInput);
+        $(todoNewInput).html('<i class="bi bi-app"></i>');
+        $(todoNewDiv).append(todoNewInput);
 
         const todoNewP = document.createElement("p");
-        todoNewP.innerHTML = todo; 
-        todoNewDiv.appendChild(todoNewP);
+        $(todoNewP).text(todo);
+        $(todoNewDiv).append(todoNewP);
 
         const todoNewAction = document.createElement("span");
-        todoNewAction.innerHTML = '<i class="bi bi-trash3-fill close"></i>';
-        todoNewDiv.appendChild(todoNewAction);
+        $(todoNewAction).html('<i class="bi bi-trash3-fill close"></i>');
+        $(todoNewDiv).append(todoNewAction);
 
-        todoList.appendChild(todoNewDiv);
+        $(todoList).append(todoNewDiv);
+    });
+
+    $("span").hover(function() {
+        $(this).css('cursor','pointer');
+    }, function() {
+        $(this).css('cursor','auto');
     });
 }
 
+//Delete Todo Item from Local Storage
 
 function deleteTodosLocal(todoDelete) {
     let todo;
