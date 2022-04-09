@@ -67,7 +67,7 @@ function TodoAction(e) {
     }
 }
 
-
+//Add Todo Item to Local Storage
 function saveTodoLocal(todoItem) {
     let todo;
     if (localStorage.getItem('todo') === null) {
@@ -81,7 +81,7 @@ function saveTodoLocal(todoItem) {
     localStorage.setItem("todo", JSON.stringify(todo));
 }
 
-
+//Add items in locale storage every time we enter or refresh the page
 function getTodosLocal(todoItem) {
     let todo;
     if (localStorage.getItem('todo') === null) {
@@ -118,7 +118,6 @@ function getTodosLocal(todoItem) {
 }
 
 //Delete Todo Item from Local Storage
-
 function deleteTodosLocal(todoDelete) {
     let todo;
     if (localStorage.getItem('todo') === null) {
